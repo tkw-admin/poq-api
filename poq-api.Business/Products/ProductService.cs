@@ -38,7 +38,19 @@ namespace poq_api.Business.Products
             return result;
         }
 
-        private static void DetermineFilterOptions(List<Product> products, FilterResult result)
+        private List<Product> FilterProducts(List<Product> products, int? maxprice, string size)
+        {
+            if (maxprice.HasValue)
+                products = products.Where(x => x.Price <= maxprice.Value).ToList();
+            if (!string.IsNullOrEmpty(size))
+            {
+                var sizes = size.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                products = products.Where(x => x.Sizes.Intersect(sizes).Any()).ToList();
+            }
+            return products;
+        }
+
+        private void DetermineFilterOptions(List<Product> products, FilterResult result)
         {
             result.FilterOptions = new FilterOptions();
             result.FilterOptions.MinPrice = products.Min(x => x.Price);
@@ -51,18 +63,6 @@ namespace poq_api.Business.Products
                                orderby g.Count() descending
                                select g).Skip(5).Take(10).Select(x => x.Key).ToList();
             result.FilterOptions.CommonWords = commonWords;
-        }
-
-        private static List<Product> FilterProducts(List<Product> products, int? maxprice, string size)
-        {
-            if (maxprice.HasValue)
-                products = products.Where(x => x.Price <= maxprice.Value).ToList();
-            if (!string.IsNullOrEmpty(size))
-            {
-                var sizes = size.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                products = products.Where(x => x.Sizes.Intersect(sizes).Any()).ToList();
-            }
-            return products;
         }
 
         private void HighlightDescriptionWords(List<Product> products, string highlight)
