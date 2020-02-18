@@ -5,4 +5,8 @@
     <RootNamespace>poq_api.Business</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="RestEase" Version="1.4.10" />
+  </ItemGroup>
+
 </Project>
