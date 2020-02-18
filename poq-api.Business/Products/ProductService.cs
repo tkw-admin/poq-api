@@ -23,14 +23,14 @@ namespace poq_api.Business.Products
             //Api.Authorization = new AuthenticationHeaderValue("Basic", credentials);
         }
 
-        public async Task<FilterResult> FilterProducts(int? minprice, int? maxprice, string size, string highlight)
+        public async Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight)
         {
             var result = new FilterResult();
 
             var productResult = await Api.GetProducts();
             var products = productResult.Products;
 
-            products = FilterProducts(products, minprice, maxprice, size);
+            products = FilterProducts(products, maxprice, size);
             DetermineFilterOptions(products, result);
             HighlightDescriptionWords(products, highlight);
             result.Products = products;
@@ -49,14 +49,12 @@ namespace poq_api.Business.Products
             var commonWords = (from word in allWords
                                group word by word into g
                                orderby g.Count() descending
-                               select g).Skip(5).Select(x => x.Key).ToList();
+                               select g).Skip(5).Take(10).Select(x => x.Key).ToList();
             result.FilterOptions.CommonWords = commonWords;
         }
 
-        private static List<Product> FilterProducts(List<Product> products, int? minprice, int? maxprice, string size)
+        private static List<Product> FilterProducts(List<Product> products, int? maxprice, string size)
         {
-            if (minprice.HasValue)
-                products = products.Where(x => x.Price >= minprice.Value).ToList();
             if (maxprice.HasValue)
                 products = products.Where(x => x.Price <= maxprice.Value).ToList();
             if (!string.IsNullOrEmpty(size))

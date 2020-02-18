@@ -19,10 +19,10 @@ namespace poq_api.Controllers
 
         // GET api/filter
         [HttpGet]
-        public async Task<ActionResult<FilterResult>> Get(int? minprice, int? maxprice, string size, string highlight)
+        public async Task<ActionResult<FilterResult>> Get(int? maxprice, string size, string highlight)
         {
             var productService = ServiceFactory.CreateProductService(Endpoints.ProductsUrl);
-            return await productService.FilterProducts(minprice, maxprice, size, highlight);
+            return await productService.FilterProducts(maxprice, size, highlight);
         }
 
     }
