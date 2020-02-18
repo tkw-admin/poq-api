@@ -10,20 +10,19 @@ namespace poq_api.Controllers
     [ApiController]
     public class FilterController : ControllerBase
     {
-        private EndpointConfiguration Endpoints { get; set; }
+        private IProductClient ProductClient { get; set; }
 
-        public FilterController(EndpointConfiguration endpoints)
+        public FilterController(IProductClient productClient)
         {
-            Endpoints = endpoints;
+            ProductClient = productClient;
         }
 
         // GET api/filter
         [HttpGet]
         public async Task<ActionResult<FilterResult>> Get(int? maxprice, string size, string highlight)
         {
-            var productService = ServiceFactory.CreateProductService(Endpoints.ProductsUrl);
+            var productService = ServiceFactory.CreateProductService(ProductClient);
             return await productService.FilterProducts(maxprice, size, highlight);
         }
-
     }
 }

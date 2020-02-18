@@ -1,5 +1,4 @@
-﻿using RestEase;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,16 +10,9 @@ namespace poq_api.Business.Products
     {
         private IProductClient Api { get; set; }
 
-        public ProductService(string path, string username, string password)
+        public ProductService(IProductClient client)
         {
-            CreateClientEndpoint(path, username, password);
-        }
-
-        private void CreateClientEndpoint(string path, string username, string password)
-        {
-            Api = RestClient.For<IProductClient>(path);
-            //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
-            //Api.Authorization = new AuthenticationHeaderValue("Basic", credentials);
+            Api = client;
         }
 
         public async Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight)

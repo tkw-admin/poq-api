@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using poq_api.Business;
+using poq_api.Business.Products;
 using poq_api.Configuration;
 
 namespace poq_api
@@ -23,7 +25,9 @@ namespace poq_api
 
             var endpointConfig = new EndpointConfiguration();
             Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
-            services.AddSingleton(endpointConfig);
+            var productClient = ServiceFactory.CreateProductClient(endpointConfig.ProductsUrl, null, null);
+
+            services.AddSingleton<IProductClient>(productClient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
