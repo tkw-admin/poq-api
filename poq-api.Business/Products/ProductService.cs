@@ -27,8 +27,8 @@ namespace poq_api.Business.Products
             Logger.Log(LogLevel.Debug, "mock.io response: " + JsonConvert.SerializeObject(productResult));
             var products = productResult.Products;
 
-            products = FilterProducts(products, maxprice, size);
             DetermineFilterOptions(products, result);
+            products = FilterProducts(products, maxprice, size);
             HighlightDescriptionWords(products, highlight);
             result.Products = products;
 
