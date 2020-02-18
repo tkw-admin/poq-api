@@ -107,7 +107,6 @@ namespace Tests
             var response = await Client.SendAsync(request);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<FilterResult>(json);
             var expectedSizes = new List<string> { "small", "medium", "large" };
@@ -124,11 +123,70 @@ namespace Tests
             var response = await Client.SendAsync(request);
 
             // Assert
-            response.EnsureSuccessStatusCode();
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<FilterResult>(json);
             var expectedCommonWords = new List<string> { "shirt", "hat", "trouser", "green", "blue", "red", "belt", "bag", "shoe", "tie" };
             Assert.AreEqual(expectedCommonWords, result.FilterOptions.CommonWords);
+        }
+
+        [Test]
+        public async Task CheckMaxPriceFilter()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/filter?maxprice=20");
+
+            // Act
+            var response = await Client.SendAsync(request);
+
+            // Assert
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilterResult>(json);
+            Assert.AreEqual(33, result.Products.Count);
+        }
+
+        [Test]
+        public async Task CheckMaxPriceFilterNoResults()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/filter?maxprice=0");
+
+            // Act
+            var response = await Client.SendAsync(request);
+
+            // Assert
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilterResult>(json);
+            Assert.AreEqual(0, result.Products.Count);
+        }
+
+        [Test]
+        public async Task CheckSizeFilter()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/filter?size=medium");
+
+            // Act
+            var response = await Client.SendAsync(request);
+
+            // Assert
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilterResult>(json);
+            Assert.AreEqual(24, result.Products.Count);
+        }
+
+        [Test]
+        public async Task CheckSizeFilterNoResults()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/filter?size=unknown");
+
+            // Act
+            var response = await Client.SendAsync(request);
+
+            // Assert
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilterResult>(json);
+            Assert.AreEqual(0, result.Products.Count);
         }
     }
 }
