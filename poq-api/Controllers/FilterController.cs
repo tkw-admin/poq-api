@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using poq_api.Business;
 using poq_api.Business.Products;
-using poq_api.Configuration;
 using System.Threading.Tasks;
 
 namespace poq_api.Controllers

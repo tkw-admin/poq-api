@@ -26,8 +26,13 @@ namespace poq_api
             var endpointConfig = new EndpointConfiguration();
             Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
             var productClient = ServiceFactory.CreateProductClient(endpointConfig.ProductsUrl, null, null);
-
             services.AddSingleton<IProductClient>(productClient);
+
+            services.AddSwaggerDocument(configure =>
+            {
+                configure.Title = "Filter Products API";
+                configure.Version = "v1";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,8 +46,11 @@ namespace poq_api
             {
                 app.UseHsts();
             }
-
             app.UseHttpsRedirection();
+
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
             app.UseMvc();
         }
     }
