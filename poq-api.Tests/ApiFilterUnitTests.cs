@@ -10,6 +10,7 @@ using poq_api.Tests.Mocks;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Tests
@@ -187,6 +188,32 @@ namespace Tests
             var json = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<FilterResult>(json);
             Assert.AreEqual(0, result.Products.Count);
+        }
+
+        [Test]
+        public async Task CheckHighlight()
+        {
+            // Arrange
+            var request = new HttpRequestMessage(new HttpMethod("GET"), "/api/filter?highlight=green,blue");
+            var words = new List<string> { "green", "blue" };
+
+            // Act
+            var response = await Client.SendAsync(request);
+
+            // Assert
+            var json = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<FilterResult>(json);
+
+            foreach (var product in result.Products)
+                foreach (var word in words)
+                {
+                    var isMatch =  Regex.IsMatch(product.Description, word);
+                    if (isMatch)
+                    {
+                        var isHighlightMatch = Regex.IsMatch(product.Description, "<em>" + word + "</em>");
+                        Assert.AreEqual(true, isHighlightMatch);
+                    }
+                }
         }
     }
 }
