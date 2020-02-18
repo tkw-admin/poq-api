@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using poq_api.Business;
 using poq_api.Business.Products;
+using poq_api.Configuration;
+using System.Threading.Tasks;
 
 namespace poq_api.Controllers
 {
@@ -13,12 +10,19 @@ namespace poq_api.Controllers
     [ApiController]
     public class FilterController : ControllerBase
     {
+        private EndpointConfiguration Endpoints { get; set; }
+
+        public FilterController(EndpointConfiguration endpoints)
+        {
+            Endpoints = endpoints;
+        }
+
         // GET api/filter
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> Get(int maxprice, string size, string highlight)
+        public async Task<ActionResult<FilterResult>> Get(int? minprice, int? maxprice, string size, string highlight)
         {
-            var productService = ServiceFactory.CreateProductService("http://www.mocky.io/v2/5e307edf3200005d00858b49");
-            return await productService.GetProducts();
+            var productService = ServiceFactory.CreateProductService(Endpoints.ProductsUrl);
+            return await productService.FilterProducts(minprice, maxprice, size, highlight);
         }
 
     }
