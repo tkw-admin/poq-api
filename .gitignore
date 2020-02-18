@@ -1,0 +1,4 @@
+.vs
+.sass-cache
+bin/
+obj/
