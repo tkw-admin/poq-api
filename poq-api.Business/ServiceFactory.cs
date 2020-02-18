@@ -1,13 +1,14 @@
-﻿using poq_api.Business.Products;
+﻿using Microsoft.Extensions.Logging;
+using poq_api.Business.Products;
 using RestEase;
 
 namespace poq_api.Business
 {
     public static class ServiceFactory
     {
-        public static IProductService CreateProductService(IProductClient client)
+        public static IProductService CreateProductService(IProductClient client, ILogger logger)
         {
-            var productService = new ProductService(client);
+            var productService = new ProductService(client, logger);
             return productService;
         }
 
