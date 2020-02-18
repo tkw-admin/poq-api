@@ -30,6 +30,31 @@ namespace poq_api.Business.Products
             var productResult = await Api.GetProducts();
             var products = productResult.Products;
 
+            products = FilterProducts(products, minprice, maxprice, size);
+            DetermineFilterOptions(products, result);
+            HighlightDescriptionWords(products, highlight);
+            result.Products = products;
+
+            return result;
+        }
+
+        private static void DetermineFilterOptions(List<Product> products, FilterResult result)
+        {
+            result.FilterOptions = new FilterOptions();
+            result.FilterOptions.MinPrice = products.Min(x => x.Price);
+            result.FilterOptions.MaxPrice = products.Max(x => x.Price);
+            result.FilterOptions.Sizes = products.SelectMany(x => x.Sizes).Distinct().ToList();
+
+            var allWords = products.SelectMany(x => x.Description.Replace(".", string.Empty).Split(" ", StringSplitOptions.RemoveEmptyEntries));
+            var commonWords = (from word in allWords
+                               group word by word into g
+                               orderby g.Count() descending
+                               select g).Skip(5).Select(x => x.Key).ToList();
+            result.FilterOptions.CommonWords = commonWords;
+        }
+
+        private static List<Product> FilterProducts(List<Product> products, int? minprice, int? maxprice, string size)
+        {
             if (minprice.HasValue)
                 products = products.Where(x => x.Price >= minprice.Value).ToList();
             if (maxprice.HasValue)
@@ -39,10 +64,7 @@ namespace poq_api.Business.Products
                 var sizes = size.Split(",", StringSplitOptions.RemoveEmptyEntries);
                 products = products.Where(x => x.Sizes.Intersect(sizes).Any()).ToList();
             }
-            HighlightDescriptionWords(products, highlight);
-
-            result.Products = products;
-            return result;
+            return products;
         }
 
         private void HighlightDescriptionWords(List<Product> products, string highlight)
