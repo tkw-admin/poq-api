@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -9,10 +11,12 @@ namespace poq_api.Business.Products
     public class ProductService : IProductService
     {
         private IProductClient Api { get; set; }
+        private ILogger Logger { get; set; }
 
-        public ProductService(IProductClient client)
+        public ProductService(IProductClient client, ILogger logger)
         {
             Api = client;
+            Logger = logger;
         }
 
         public async Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight)
@@ -20,6 +24,7 @@ namespace poq_api.Business.Products
             var result = new FilterResult();
 
             var productResult = await Api.GetProducts();
+            Logger.Log(LogLevel.Debug, "mock.io response: " + JsonConvert.SerializeObject(productResult));
             var products = productResult.Products;
 
             products = FilterProducts(products, maxprice, size);
