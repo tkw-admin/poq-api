@@ -50,8 +50,11 @@ namespace poq_api.Business.Products
         private void DetermineFilterOptions(List<Product> products, FilterResult result)
         {
             result.FilterOptions = new FilterOptions();
-            result.FilterOptions.MinPrice = products.Min(x => x.Price);
-            result.FilterOptions.MaxPrice = products.Max(x => x.Price);
+            if (products.Any())
+            {
+                result.FilterOptions.MinPrice = products.Min(x => x.Price);
+                result.FilterOptions.MaxPrice = products.Max(x => x.Price);
+            }
             result.FilterOptions.Sizes = products.SelectMany(x => x.Sizes).Distinct().ToList();
 
             var allWords = products.SelectMany(x => x.Description.Replace(".", string.Empty).Split(" ", StringSplitOptions.RemoveEmptyEntries));
