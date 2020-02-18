@@ -13,7 +13,7 @@ namespace poq_api.Business.Products
         private IProductClient Api { get; set; }
         private ILogger Logger { get; set; }
 
-        public ProductService(IProductClient client, ILogger logger)
+        public ProductService(IProductClient client, ILogger<ProductService> logger)
         {
             Api = client;
             Logger = logger;

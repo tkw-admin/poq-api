@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using poq_api.Business;
 using poq_api.Business.Products;
 using poq_api.Configuration;
+using RestEase;
 
 namespace poq_api
 {
@@ -25,8 +25,13 @@ namespace poq_api
 
             var endpointConfig = new EndpointConfiguration();
             Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
-            var productClient = ServiceFactory.CreateProductClient(endpointConfig.ProductsUrl, null, null);
+            var productClient = RestClient.For<IProductClient>(endpointConfig.ProductsUrl);
+            // if you need authorization to the mocky.io 
+            //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
+            //productClient.Authorization = new AuthenticationHeaderValue("Basic", credentials);
             services.AddSingleton<IProductClient>(productClient);
+
+            services.AddScoped<IProductService, ProductService>();
 
             services.AddSwaggerDocument(configure =>
             {
