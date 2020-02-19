@@ -14,7 +14,7 @@ namespace poq_api.Middlewares
     {
         private const string JsonContentType = "application/json";
         private readonly RequestDelegate request;
-        private readonly ILogger _logger;
+        private readonly ILogger logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionHandlerMiddleware"/> class.
@@ -23,7 +23,7 @@ namespace poq_api.Middlewares
         public ExceptionHandlerMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             request = next;
-            _logger = loggerFactory.CreateLogger<ExceptionHandlerMiddleware>();
+            logger = loggerFactory.CreateLogger<ExceptionHandlerMiddleware>();
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace poq_api.Middlewares
                 // set http status code and content type
                 context.Response.StatusCode = httpStatusCode;
                 context.Response.ContentType = JsonContentType;
-                _logger.LogInformation($"Error, status code: {context.Response.StatusCode}. Error exception {exception}");
+                logger.LogInformation($"Error, status code: {context.Response.StatusCode}. Error exception {exception}");
 
                 // writes / returns error model to the response
                 await context.Response.WriteAsync(

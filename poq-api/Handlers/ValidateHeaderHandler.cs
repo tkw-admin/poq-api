@@ -11,7 +11,9 @@ namespace poq_api.Handlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            if (!request.Headers.Contains("X-API-KEY"))
+            //Used for request validation'
+            //This is a mock on how to intercept the request
+            if (request.Headers.Contains("X-API-KEY"))
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
