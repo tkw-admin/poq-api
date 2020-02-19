@@ -8,7 +8,7 @@ namespace poq_api.Controllers
     [ApiController]
     public class FilterController : ControllerBase
     {
-        private IProductService ProductService { get; set; }
+        private readonly IProductService ProductService;
 
         public FilterController(IProductService productService)
         {

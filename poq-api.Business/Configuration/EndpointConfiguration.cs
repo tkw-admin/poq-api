@@ -1,4 +1,4 @@
-﻿namespace poq_api.Configuration
+﻿namespace poq_api.Business.Configuration
 {
     public class EndpointConfiguration
     {

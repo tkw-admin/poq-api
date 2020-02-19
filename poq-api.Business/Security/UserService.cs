@@ -1,32 +1,32 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using poq_api.Business.Configuration;
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using poq_api.Business.Helpers;
+using System.Text;
 
 namespace poq_api.Business.Security
 {
     public class UserService : IUserService
     {
-        private List<User> _users = new List<User>
+        private readonly List<User> Users = new List<User>
         {
             new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
         };
 
-        private readonly AppSettings _appSettings;
+        private readonly AppSettings AppSettings;
 
         public UserService(IOptions<AppSettings> appSettings)
         {
-            _appSettings = appSettings.Value;
+            AppSettings = appSettings.Value;
         }
 
         public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = Users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -34,7 +34,7 @@ namespace poq_api.Business.Security
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -52,7 +52,7 @@ namespace poq_api.Business.Security
 
         public IEnumerable<User> GetAll()
         {
-            return _users.WithoutPasswords();
+            return Users.WithoutPasswords();
         }
     }
 }

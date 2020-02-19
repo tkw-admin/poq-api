@@ -1,10 +1,8 @@
 ﻿using poq_api.Business.Security;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace poq_api.Business.Helpers
+namespace poq_api.Business.Security
 {
     public static class ExtensionMethods
     {

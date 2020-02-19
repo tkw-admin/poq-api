@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using poq_api.Business.Helpers;
+using poq_api.Business.Configuration;
 using poq_api.Business.Products;
 using poq_api.Business.Security;
-using poq_api.Configuration;
 using RestEase;
 using System.Text;
 
