@@ -105,6 +105,7 @@ namespace poq_api
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
+            app.UseAuthentication();
             app.UseMiddleware<Middlewares.ExceptionHandlerMiddleware>();
             app.UseMvc();
         }
