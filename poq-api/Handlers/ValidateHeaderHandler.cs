@@ -11,7 +11,7 @@ namespace poq_api.Handlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            //Used for request validation'
+            //Used for request validation
             //This is a mock on how to intercept the request
             if (request.Headers.Contains("X-API-KEY"))
             {

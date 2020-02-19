@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using poq_api.Business;
 using poq_api.Model;
 using System;
 using System.ComponentModel.DataAnnotations;
