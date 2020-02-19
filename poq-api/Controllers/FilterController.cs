@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using poq_api.Business;
-using poq_api.Business.Products;
 using System.Threading.Tasks;
 
 namespace poq_api.Controllers
@@ -18,10 +17,10 @@ namespace poq_api.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<IActionResult> Get(int? maxprice, string size, string highlight)
+        public async Task<IActionResult> Get([FromQuery]FilterQuery query)
         {
             _logger.LogInformation("Search by product....");
-            var response = await _productService.FilterProducts(maxprice, size, highlight);
+            var response = await _productService.FilterProducts(query);
             return Ok(response);
         }
     }

@@ -1,10 +1,10 @@
-﻿namespace poq_api.Handlers
-{
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
+﻿using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
+namespace poq_api.Handlers
+{
     public class ValidateHeaderHandler : DelegatingHandler
     {
         protected override async Task<HttpResponseMessage> SendAsync(

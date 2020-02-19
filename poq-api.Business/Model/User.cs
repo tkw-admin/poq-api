@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace poq_api.Business
+﻿namespace poq_api.Business
 {
     public class User
     {

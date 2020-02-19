@@ -2,20 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using poq_api.Business;
 
-namespace WebApi.Controllers
+namespace poq_api.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(IUserService userService)
         {
             _userService = userService;
         }
 
+        // POST api/users/authenticate
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
@@ -28,6 +27,7 @@ namespace WebApi.Controllers
             return Ok(user);
         }
 
+        // GET api/users/getall
         [HttpGet]
         public IActionResult GetAll()
         {
