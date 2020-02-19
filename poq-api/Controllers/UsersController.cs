@@ -8,10 +8,11 @@ namespace poq_api.Controllers
     public class UsersController : BaseApiController
     {
         private readonly IUserService _userService;
-
-        public UsersController(IUserService userService)
+        private readonly IAppLogger<UsersController> _logger;
+        public UsersController(IUserService userService, IAppLogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         // POST api/users/authenticate
@@ -20,7 +21,7 @@ namespace poq_api.Controllers
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);
-
+            _logger.LogInformation($"Call user authenticate....");
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
