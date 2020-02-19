@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>poq_api</RootNamespace>
-    <AssemblyName>Api.Net</AssemblyName>
+    <AssemblyName>poq_api</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

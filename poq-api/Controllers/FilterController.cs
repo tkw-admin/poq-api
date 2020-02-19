@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 
 namespace poq_api.Controllers
 {
+    [Route("api/[controller]/[action]")]
+    [ApiController]
     public class FilterController : BaseApiController
     {
         private readonly IProductService _productService;

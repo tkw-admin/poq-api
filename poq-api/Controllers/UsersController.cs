@@ -2,18 +2,16 @@
 using Microsoft.AspNetCore.Mvc;
 using poq_api.Business;
 
-namespace WebApi.Controllers
+namespace poq_api.Controllers
 {
     [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseApiController
     {
-        private readonly IUserService UserService;
+        private readonly IUserService _userService;
 
         public UsersController(IUserService userService)
         {
-            UserService = userService;
+            _userService = userService;
         }
 
         // POST api/users/authenticate
@@ -21,7 +19,7 @@ namespace WebApi.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
-            var user = UserService.Authenticate(model.Username, model.Password);
+            var user = _userService.Authenticate(model.Username, model.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -33,7 +31,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = UserService.GetAll();
+            var users = _userService.GetAll();
             return Ok(users);
         }
     }
