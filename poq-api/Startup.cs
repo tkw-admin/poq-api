@@ -27,7 +27,7 @@ namespace poq_api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var endpointConfiguration = Configuration.GetSection("EndpointConfiguration").Get<EndpointConfiguration>();
+            var endpointConfiguration = Configuration.GetSection("Endpoints").Get<Endpoints>();
             var productClient = RestClient.For<IProductClient>(endpointConfiguration.ProductsUrl);
             // here you can setup the authentication to the source endpoint, if any, for ex. basic authorization
             //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
