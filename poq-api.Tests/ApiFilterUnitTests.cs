@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using poq_api;
 using poq_api.Business;
-using poq_api.Business.Products;
 using poq_api.Tests.Mocks;
 using System.Collections.Generic;
 using System.IO;

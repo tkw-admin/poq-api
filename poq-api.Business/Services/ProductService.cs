@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace poq_api.Business.Products
+namespace poq_api.Business
 {
     public class ProductService : IProductService
     {
@@ -20,28 +20,27 @@ namespace poq_api.Business.Products
             _logger = logger;
         }
 
-        public async Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight)
+        public async Task<FilterResult> FilterProducts(FilterQuery query)
         {
             _logger.LogInformation($"Search products...");
-            return BuildResponse(await _mockyService.GetProducts(), maxprice, size, highlight);
+            return BuildResponse(await _mockyService.GetProducts(), query);
         }
 
-        private FilterResult BuildResponse(MockyResponse item, int? maxprice, string size, string highlights)
+        private FilterResult BuildResponse(MockyResponse item, FilterQuery query)
         {
             var result = new FilterResult();
 
             if (item != null && item.Products.Any())
             {
                 result.FilterOptions = SetFilterOptions(item.Products);
-                var products = FilterProducts(item.Products, maxprice, size);
-
+                var products = FilterProducts(item.Products, query.maxprice, query.size);
 
                 result.Products = products.Select(t => new Product()
                 {
                     Title = t.Title,
                     Price = t.Price,
                     Sizes = t.Sizes,
-                    Description = SetHighlight(t.Description, highlights)
+                    Description = SetHighlight(t.Description, query.highlight)
                 }).ToList();
             }
 
@@ -62,7 +61,7 @@ namespace poq_api.Business.Products
             return products;
         }
        
-        private static FilterOptions SetFilterOptions(List<MockyProduct> products)
+        private FilterOptions SetFilterOptions(List<MockyProduct> products)
         {
             return new FilterOptions()
             {

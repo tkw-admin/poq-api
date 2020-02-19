@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-namespace poq_api.Business.Services
+namespace poq_api.Business
 {
     public class LoggerAdapter<T> : IAppLogger<T>
     {

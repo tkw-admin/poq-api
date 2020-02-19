@@ -9,10 +9,6 @@ using Microsoft.IdentityModel.Tokens;
 using Polly;
 using Polly.Extensions.Http;
 using poq_api.Business;
-using poq_api.Business.Helpers;
-using poq_api.Business.Products;
-using poq_api.Business.Services;
-using poq_api.Configuration;
 using poq_api.Handlers;
 using System;
 using System.Net.Http;
@@ -38,17 +34,14 @@ namespace poq_api
             var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
             loggerFactory.CreateLogger<Startup>().LogInformation("Start services registration");
 
-            var endpointConfig = new EndpointConfiguration();
-            Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
-
-            
-            //typed client strategy: Service agent pattern
-            services.AddHttpClient<IMockyService, MockyService>(c =>
-                    c.BaseAddress = new Uri(endpointConfig.ProductsUrl)
-
-            ).SetHandlerLifetime(TimeSpan.FromMinutes(5))
-             .AddPolicyHandler(GetRetryPolicy())
-             .AddHttpMessageHandler<ValidateHeaderHandler>();
+            var endpointConfig = Configuration.GetSection("Endpoints").Get<Endpoints>();
+            //Typed client strategy: Service agent pattern
+            services.AddHttpClient<IMockyService, MockyService>(
+                c => c.BaseAddress = new Uri(endpointConfig.ProductsUrl)
+            )
+            .SetHandlerLifetime(TimeSpan.FromMinutes(5))
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddHttpMessageHandler<ValidateHeaderHandler>();
 
             //Add memory cache services
             services.AddMemoryCache();
@@ -57,12 +50,11 @@ namespace poq_api
             services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<IProductService, ProductService>();
 
+            //Authentication
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

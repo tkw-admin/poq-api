@@ -9,18 +9,19 @@ namespace WebApi.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private IUserService _userService;
+        private readonly IUserService UserService;
 
         public UsersController(IUserService userService)
         {
-            _userService = userService;
+            UserService = userService;
         }
 
+        // POST api/users/authenticate
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
-            var user = _userService.Authenticate(model.Username, model.Password);
+            var user = UserService.Authenticate(model.Username, model.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -28,10 +29,11 @@ namespace WebApi.Controllers
             return Ok(user);
         }
 
+        // GET api/users/getall
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users = _userService.GetAll();
+            var users = UserService.GetAll();
             return Ok(users);
         }
     }
