@@ -28,6 +28,7 @@ namespace poq_api.Business.Products
 
             var productResult = await Api.GetProducts();
             Logger.Log(LogLevel.Debug, "mocky.io response: " + JsonConvert.SerializeObject(productResult));
+
             var products = productResult.Products;
 
             result.FilterOptions = DetermineFilterOptions(products);
@@ -36,18 +37,6 @@ namespace poq_api.Business.Products
             result.Products = products;
 
             return result;
-        }
-
-        private List<Product> FilterProducts(List<Product> products, int? maxprice, string size)
-        {
-            if (maxprice.HasValue)
-                products = products.Where(x => x.Price <= maxprice.Value).ToList();
-            if (!string.IsNullOrEmpty(size))
-            {
-                var sizes = size.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                products = products.Where(x => x.Sizes.Intersect(sizes).Any()).ToList();
-            }
-            return products;
         }
 
         private FilterOptions DetermineFilterOptions(List<Product> products)
@@ -67,6 +56,18 @@ namespace poq_api.Business.Products
                                select g).Skip(MostCommonWordsToSkip).Take(MostCommonWordsToTake).Select(x => x.Key).ToList();
             filterOptions.CommonWords = commonWords;
             return filterOptions;
+        }
+
+        private List<Product> FilterProducts(List<Product> products, int? maxprice, string size)
+        {
+            if (maxprice.HasValue)
+                products = products.Where(x => x.Price <= maxprice.Value).ToList();
+            if (!string.IsNullOrEmpty(size))
+            {
+                var sizes = size.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                products = products.Where(x => x.Sizes.Intersect(sizes).Any()).ToList();
+            }
+            return products;
         }
 
         private void HighlightDescriptionWords(List<Product> products, string highlight)

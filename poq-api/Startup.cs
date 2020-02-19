@@ -30,7 +30,7 @@ namespace poq_api
 
             var endpointConfiguration = Configuration.GetSection("EndpointConfiguration").Get<EndpointConfiguration>();
             var productClient = RestClient.For<IProductClient>(endpointConfiguration.ProductsUrl);
-            // if you need authorization to the mocky.io 
+            // here you can setup the authentication to the source endpoint, if any, for ex. basic authorization
             //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
             //productClient.Authorization = new AuthenticationHeaderValue("Basic", credentials);
             services.AddSingleton<IProductClient>(productClient);
