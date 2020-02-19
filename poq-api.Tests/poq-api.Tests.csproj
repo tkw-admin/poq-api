@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Mocks\products.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Mocks\products.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
     <PackageReference Include="nunit" Version="3.10.1" />

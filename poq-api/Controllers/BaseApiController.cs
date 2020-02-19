@@ -2,7 +2,7 @@
 
 namespace poq_api.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BaseApiController : Controller {}
 }
