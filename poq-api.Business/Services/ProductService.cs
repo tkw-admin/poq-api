@@ -28,6 +28,7 @@ namespace poq_api.Business
 
         private FilterResult BuildResponse(MockyResponse item, FilterQuery query)
         {
+            _logger.LogInformation($"Build response...");
             var result = new FilterResult();
 
             if (item != null && item.Products.Any())

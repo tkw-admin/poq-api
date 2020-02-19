@@ -19,7 +19,7 @@ namespace poq_api.Controllers
         [Produces("application/json")]
         public async Task<IActionResult> Get([FromQuery]FilterQuery query)
         {
-            _logger.LogInformation("Search by product....");
+            _logger.LogInformation("Call search products....");
             var response = await _productService.FilterProducts(query);
             return Ok(response);
         }

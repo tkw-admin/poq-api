@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using poq_api.Business;
 using poq_api.Model;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -12,14 +14,16 @@ namespace poq_api.Middlewares
     {
         private const string JsonContentType = "application/json";
         private readonly RequestDelegate request;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionHandlerMiddleware"/> class.
         /// </summary>
         /// <param name="next">The next.</param>
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILoggerFactory loggerFactory)
         {
             request = next;
+            _logger = loggerFactory.CreateLogger<ExceptionHandlerMiddleware>();
         }
 
         /// <summary>
@@ -42,6 +46,7 @@ namespace poq_api.Middlewares
                 // set http status code and content type
                 context.Response.StatusCode = httpStatusCode;
                 context.Response.ContentType = JsonContentType;
+                _logger.LogInformation($"Error, status code: {context.Response.StatusCode}. Error exception {exception}");
 
                 // writes / returns error model to the response
                 await context.Response.WriteAsync(

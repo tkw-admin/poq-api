@@ -30,7 +30,7 @@ namespace poq_api.Business
                 var response = await _httpClient.GetAsync("");
                 response.EnsureSuccessStatusCode();
                 var result = await response.Content.ReadAsAsync<MockyResponse>();
-                _logger.LogInformation($"Mock.io get data: {JsonConvert.SerializeObject(result)}");
+                _logger.LogInformation($"Mock.io get products: {JsonConvert.SerializeObject(result)}");
                 return result;
             });
         }

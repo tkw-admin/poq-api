@@ -11,7 +11,7 @@ namespace poq_api.Handlers
             HttpRequestMessage request,
             CancellationToken cancellationToken)
         {
-            if (request.Headers.Contains("X-API-KEY"))
+            if (!request.Headers.Contains("X-API-KEY"))
             {
                 return new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
