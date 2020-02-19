@@ -22,7 +22,7 @@ namespace poq_api.Business.Products
             Logger = logger;
         }
 
-        public async Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight)
+        public async Task<FilterResult> FilterProducts(FilterQuery query)
         {
             var result = new FilterResult();
 
@@ -31,8 +31,8 @@ namespace poq_api.Business.Products
             var products = productResult.Products;
 
             result.FilterOptions = DetermineFilterOptions(products);
-            products = FilterProducts(products, maxprice, size);
-            HighlightDescriptionWords(products, highlight);
+            products = FilterProducts(products, query.maxprice, query.size);
+            HighlightDescriptionWords(products, query.highlight);
             result.Products = products;
 
             return result;

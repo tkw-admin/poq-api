@@ -5,6 +5,6 @@ namespace poq_api.Business.Products
 {
     public interface IProductService
     {
-        Task<FilterResult> FilterProducts(int? maxprice, string size, string highlight);
+        Task<FilterResult> FilterProducts(FilterQuery query);
     }
 }

@@ -17,9 +17,9 @@ namespace poq_api.Controllers
 
         // GET api/filter
         [HttpGet]
-        public async Task<ActionResult<FilterResult>> Get(int? maxprice, string size, string highlight)
+        public async Task<ActionResult<FilterResult>> Get([FromQuery]FilterQuery query)
         {
-            var result = await ProductService.FilterProducts(maxprice, size, highlight);
+            var result = await ProductService.FilterProducts(query);
             return result;
         }
     }
