@@ -5,6 +5,7 @@ namespace poq_api.Business
     public class LoggerAdapter<T> : IAppLogger<T>
     {
         private readonly ILogger<T> _logger;
+
         public LoggerAdapter(ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<T>();

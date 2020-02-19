@@ -9,7 +9,7 @@ namespace poq_api.Business
     public class MockyService : IMockyService
     {
         private static readonly TimeSpan _defaultCacheDuration = TimeSpan.FromSeconds(30);
-        private static readonly string _mockCacheKey ="mockService";
+        private static readonly string _mockCacheKey = "mockService";
 
         private readonly HttpClient _httpClient;
         private readonly IAppLogger<MockyService> _logger;

@@ -60,7 +60,7 @@ namespace poq_api.Business
 
             return products;
         }
-       
+
         private FilterOptions SetFilterOptions(List<MockyProduct> products)
         {
             return new FilterOptions()
@@ -68,9 +68,14 @@ namespace poq_api.Business
                 MinPrice = products.Min(x => x.Price),
                 MaxPrice = products.Max(x => x.Price),
                 Sizes = products.SelectMany(x => x.Sizes).Distinct().ToList(),
-                CommonWords = products.SelectMany(x => x.Description.Replace(".", string.Empty).Split(" ", StringSplitOptions.RemoveEmptyEntries))
-                              .GroupBy(x => x).OrderByDescending(x => x.Count()).Skip(MostCommonWordsToSkip).Take(MostCommonWordsToTake).Select(x => x.Key)
-                              .ToList()
+                CommonWords = products
+                    .SelectMany(x => x.Description.Replace(".", string.Empty).Split(" ", StringSplitOptions.RemoveEmptyEntries))
+                    .GroupBy(x => x)
+                    .OrderByDescending(x => x.Count())
+                    .Skip(MostCommonWordsToSkip)
+                    .Take(MostCommonWordsToTake)
+                    .Select(x => x.Key)
+                    .ToList()
             };
         }
 
@@ -80,9 +85,9 @@ namespace poq_api.Business
                 return text;
 
             highlights.Split(",", StringSplitOptions.RemoveEmptyEntries).ToList().ForEach(word =>
-           {
-               text = Regex.Replace(text, word, "<em>" + word + "</em>");
-           });
+            {
+                text = Regex.Replace(text, word, "<em>" + word + "</em>");
+            });
             return text;
         }
     }

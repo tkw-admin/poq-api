@@ -1,7 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace poq_api.Business
 {
@@ -37,6 +35,4 @@ namespace poq_api.Business
         [JsonProperty("description")]
         public string Description { get; set; }
     }
-
-   
 }

@@ -11,21 +11,21 @@ namespace poq_api.Business
 {
     public class UserService : IUserService
     {
-        private readonly List<User> Users = new List<User>
+        private readonly List<User> _users = new List<User>
         {
             new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
         };
 
-        private readonly AppSettings AppSettings;
+        private readonly AppSettings _appSettings;
 
         public UserService(IOptions<AppSettings> appSettings)
         {
-            AppSettings = appSettings.Value;
+            _appSettings = appSettings.Value;
         }
 
         public User Authenticate(string username, string password)
         {
-            var user = Users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -33,7 +33,7 @@ namespace poq_api.Business
 
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(AppSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -51,7 +51,7 @@ namespace poq_api.Business
 
         public IEnumerable<User> GetAll()
         {
-            return Users.WithoutPasswords();
+            return _users.WithoutPasswords();
         }
     }
 }
