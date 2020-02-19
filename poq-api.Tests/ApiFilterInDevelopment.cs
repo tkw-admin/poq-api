@@ -5,11 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using poq_api.Business.Products;
 using poq_api.Tests.Mocks;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace poq_api.Tests

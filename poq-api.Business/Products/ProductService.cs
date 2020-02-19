@@ -10,6 +10,9 @@ namespace poq_api.Business.Products
 {
     public class ProductService : IProductService
     {
+        private const int MostCommonWordsToSkip = 5;
+        private const int MostCommonWordsToTake = 10;
+
         private IProductClient Api { get; set; }
         private ILogger Logger { get; set; }
 
@@ -24,10 +27,10 @@ namespace poq_api.Business.Products
             var result = new FilterResult();
 
             var productResult = await Api.GetProducts();
-            Logger.Log(LogLevel.Debug, "mock.io response: " + JsonConvert.SerializeObject(productResult));
+            Logger.Log(LogLevel.Debug, "mocky.io response: " + JsonConvert.SerializeObject(productResult));
             var products = productResult.Products;
 
-            DetermineFilterOptions(products, result);
+            result.FilterOptions = DetermineFilterOptions(products);
             products = FilterProducts(products, maxprice, size);
             HighlightDescriptionWords(products, highlight);
             result.Products = products;
@@ -47,22 +50,23 @@ namespace poq_api.Business.Products
             return products;
         }
 
-        private void DetermineFilterOptions(List<Product> products, FilterResult result)
+        private FilterOptions DetermineFilterOptions(List<Product> products)
         {
-            result.FilterOptions = new FilterOptions();
+            var filterOptions = new FilterOptions();
             if (products.Any())
             {
-                result.FilterOptions.MinPrice = products.Min(x => x.Price);
-                result.FilterOptions.MaxPrice = products.Max(x => x.Price);
+                filterOptions.MinPrice = products.Min(x => x.Price);
+                filterOptions.MaxPrice = products.Max(x => x.Price);
             }
-            result.FilterOptions.Sizes = products.SelectMany(x => x.Sizes).Distinct().ToList();
+            filterOptions.Sizes = products.SelectMany(x => x.Sizes).Distinct().ToList();
 
             var allWords = products.SelectMany(x => x.Description.Replace(".", string.Empty).Split(" ", StringSplitOptions.RemoveEmptyEntries));
             var commonWords = (from word in allWords
                                group word by word into g
                                orderby g.Count() descending
-                               select g).Skip(5).Take(10).Select(x => x.Key).ToList();
-            result.FilterOptions.CommonWords = commonWords;
+                               select g).Skip(MostCommonWordsToSkip).Take(MostCommonWordsToTake).Select(x => x.Key).ToList();
+            filterOptions.CommonWords = commonWords;
+            return filterOptions;
         }
 
         private void HighlightDescriptionWords(List<Product> products, string highlight)
