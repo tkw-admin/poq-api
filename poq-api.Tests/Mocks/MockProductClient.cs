@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using poq_api.Business.Products;
 using System.IO;
+using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace poq_api.Tests.Mocks
@@ -9,10 +11,14 @@ namespace poq_api.Tests.Mocks
     {
         public async Task<ProductResult> GetProducts()
         {
-            var projectDir = Directory.GetCurrentDirectory();
-            var jsonPath = Path.Combine(projectDir, "Mocks/products.json");
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceStream = assembly.GetManifestResourceStream("poq-api.Tests.Mocks.products.json");
+            var productResultJson = string.Empty;
+            using (var reader = new StreamReader(resourceStream, Encoding.UTF8))
+            {
+                productResultJson = await reader.ReadToEndAsync();
+            }
 
-            var productResultJson = await File.ReadAllTextAsync(jsonPath);
             var result = JsonConvert.DeserializeObject<ProductResult>(productResultJson);
             return result;
         }

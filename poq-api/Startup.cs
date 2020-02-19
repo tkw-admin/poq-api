@@ -28,9 +28,8 @@ namespace poq_api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            var endpointConfig = new EndpointConfiguration();
-            Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
-            var productClient = RestClient.For<IProductClient>(endpointConfig.ProductsUrl);
+            var endpointConfiguration = Configuration.GetSection("EndpointConfiguration").Get<EndpointConfiguration>();
+            var productClient = RestClient.For<IProductClient>(endpointConfiguration.ProductsUrl);
             // if you need authorization to the mocky.io 
             //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
             //productClient.Authorization = new AuthenticationHeaderValue("Basic", credentials);
@@ -40,7 +39,6 @@ namespace poq_api
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
-
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
