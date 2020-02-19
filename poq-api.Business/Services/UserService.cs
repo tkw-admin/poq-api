@@ -17,10 +17,11 @@ namespace poq_api.Business
         };
 
         private readonly AppSettings _appSettings;
-
-        public UserService(IOptions<AppSettings> appSettings)
+        private readonly IAppLogger<UserService> _logger;
+        public UserService(IOptions<AppSettings> appSettings, IAppLogger<UserService> logger)
         {
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         public User Authenticate(string username, string password)
@@ -32,6 +33,7 @@ namespace poq_api.Business
                 return null;
 
             // authentication successful so generate jwt token
+            _logger.LogInformation($"Generate token for user: {user.Id}");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor

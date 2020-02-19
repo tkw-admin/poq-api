@@ -4,6 +4,6 @@ namespace poq_api.Business
 {
     public interface IProductService
     {
-        Task<FilterResult> FilterProducts(FilterQuery query);
+        Task<FilterResult> FilterProducts(FilterQueryRequest query);
     }
 }

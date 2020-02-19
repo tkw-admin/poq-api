@@ -17,7 +17,7 @@ namespace poq_api.Controllers
 
         [HttpGet]
         [Produces("application/json")]
-        public async Task<IActionResult> Get([FromQuery]FilterQuery query)
+        public async Task<IActionResult> Get([FromQuery]FilterQueryRequest query)
         {
             _logger.LogInformation("Call search products....");
             var response = await _productService.FilterProducts(query);

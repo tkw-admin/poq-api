@@ -20,28 +20,31 @@ namespace poq_api.Business
             _logger = logger;
         }
 
-        public async Task<FilterResult> FilterProducts(FilterQuery query)
+        public async Task<FilterResult> FilterProducts(FilterQueryRequest query)
         {
             _logger.LogInformation($"Search products...");
             return BuildResponse(await _mockyService.GetProducts(), query);
         }
 
-        private FilterResult BuildResponse(MockyResponse item, FilterQuery query)
+        private FilterResult BuildResponse(MockyResponse item, FilterQueryRequest query)
         {
             _logger.LogInformation($"Build response...");
+
             var result = new FilterResult();
 
             if (item != null && item.Products.Any())
             {
                 result.FilterOptions = SetFilterOptions(item.Products);
-                var products = FilterProducts(item.Products, query.maxprice, query.size);
+
+                var products = FilterProducts(item.Products, query.Maxprice, query.Size);
 
                 result.Products = products.Select(t => new Product()
                 {
                     Title = t.Title,
                     Price = t.Price,
                     Sizes = t.Sizes,
-                    Description = SetHighlight(t.Description, query.highlight)
+                    Description = SetHighlight(t.Description, query.Highlight)
+
                 }).ToList();
             }
 
@@ -89,6 +92,7 @@ namespace poq_api.Business
             {
                 text = Regex.Replace(text, word, "<em>" + word + "</em>");
             });
+
             return text;
         }
     }

@@ -45,7 +45,7 @@ namespace poq_api.Middlewares
                 // set http status code and content type
                 context.Response.StatusCode = httpStatusCode;
                 context.Response.ContentType = JsonContentType;
-                logger.LogInformation($"Error, status code: {context.Response.StatusCode}. Error exception {exception}");
+                logger.LogError($"Error, status code: {context.Response.StatusCode}. Error exception {exception}");
 
                 // writes / returns error model to the response
                 await context.Response.WriteAsync(

@@ -1,7 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-
-namespace poq_api.Business
+﻿namespace poq_api.Business
 {
+    using Microsoft.Extensions.Logging;
     public class LoggerAdapter<T> : IAppLogger<T>
     {
         private readonly ILogger<T> _logger;
@@ -19,6 +18,11 @@ namespace poq_api.Business
         public void LogInformation(string message, params object[] args)
         {
             _logger.LogInformation(message, args);
+        }
+
+        public void LogError(string message, params object[] args)
+        {
+            _logger.LogError(message, args);
         }
     }
 }
