@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.1022
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "poq-api", "poq-api\poq-api.csproj", "{2B891DEE-3226-45B0-AFF5-CE39710EAC68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "poq-api", "poq-api\poq-api.csproj", "{2B891DEE-3226-45B0-AFF5-CE39710EAC68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "poq-api.Tests", "poq-api.Tests\poq-api.Tests.csproj", "{5CEB442A-9CA6-4D64-AACD-A48A515E9EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "poq-api.Tests", "poq-api.Tests\poq-api.Tests.csproj", "{5CEB442A-9CA6-4D64-AACD-A48A515E9EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "poq-api.Business", "poq-api.Business\poq-api.Business.csproj", "{C0ECC69A-82FB-412B-B8DF-4E8E40671407}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "poq-api.Business", "poq-api.Business\poq-api.Business.csproj", "{C0ECC69A-82FB-412B-B8DF-4E8E40671407}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
