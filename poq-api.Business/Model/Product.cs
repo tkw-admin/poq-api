@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace poq_api.Business.Products
+namespace poq_api.Business
 {
     public class Product
     {

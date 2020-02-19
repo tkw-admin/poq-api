@@ -1,18 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>poq_api.Business</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Model\ApiKeys.cs" />
-    <Compile Remove="Model\ProductResult.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.2.0" />
     <PackageReference Include="RestEase" Version="1.4.10" />
   </ItemGroup>
 

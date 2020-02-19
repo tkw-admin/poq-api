@@ -8,7 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using poq_api.Business.Helpers;
 
-namespace poq_api.Business.Security
+namespace poq_api.Business
 {
     public class UserService : IUserService
     {

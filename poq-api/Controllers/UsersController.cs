@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using poq_api.Business.Products;
-using poq_api.Business.Security;
+using poq_api.Business;
 
 namespace WebApi.Controllers
 {

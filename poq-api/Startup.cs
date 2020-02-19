@@ -4,12 +4,18 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Polly;
+using Polly.Extensions.Http;
+using poq_api.Business;
 using poq_api.Business.Helpers;
 using poq_api.Business.Products;
-using poq_api.Business.Security;
+using poq_api.Business.Services;
 using poq_api.Configuration;
-using RestEase;
+using poq_api.Handlers;
+using System;
+using System.Net.Http;
 using System.Text;
 
 namespace poq_api
@@ -26,16 +32,29 @@ namespace poq_api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddTransient<ValidateHeaderHandler>();
+
+            var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
+            loggerFactory.CreateLogger<Startup>().LogInformation("Start services registration");
 
             var endpointConfig = new EndpointConfiguration();
             Configuration.GetSection("EndpointConfiguration").Bind(endpointConfig);
-            var productClient = RestClient.For<IProductClient>(endpointConfig.ProductsUrl);
-            // if you need authorization to the mocky.io 
-            //var credentials = Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}"));
-            //productClient.Authorization = new AuthenticationHeaderValue("Basic", credentials);
-            services.AddSingleton<IProductClient>(productClient);
 
+            
+            //typed client strategy: Service agent pattern
+            services.AddHttpClient<IMockyService, MockyService>(c =>
+                    c.BaseAddress = new Uri(endpointConfig.ProductsUrl)
+
+            ).SetHandlerLifetime(TimeSpan.FromMinutes(5))
+             .AddPolicyHandler(GetRetryPolicy())
+             .AddHttpMessageHandler<ValidateHeaderHandler>();
+
+            //Add memory cache services
+            services.AddMemoryCache();
+
+            //Scoped services
+            services.AddScoped(typeof(IAppLogger<>), typeof(LoggerAdapter<>));
             services.AddScoped<IProductService, ProductService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -43,6 +62,7 @@ namespace poq_api
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -85,8 +105,16 @@ namespace poq_api
 
             app.UseOpenApi();
             app.UseSwaggerUi3();
-
+            app.UseMiddleware<Middlewares.ExceptionHandlerMiddleware>();
             app.UseMvc();
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+                .WaitAndRetryAsync(6, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
         }
     }
 }

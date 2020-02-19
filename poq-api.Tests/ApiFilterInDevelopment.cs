@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using poq_api.Business;
 using poq_api.Business.Products;
 using poq_api.Tests.Mocks;
 using System.IO;
@@ -28,7 +29,7 @@ namespace poq_api.Tests
             webhostBuilder.UseStartup<Startup>();
             webhostBuilder.ConfigureTestServices(config =>
             {
-                config.AddSingleton<IProductClient>(new MockProductClient());
+                config.AddSingleton<IMockyService>(new MockProductClient());
             });
             webhostBuilder.UseEnvironment("Development");
 

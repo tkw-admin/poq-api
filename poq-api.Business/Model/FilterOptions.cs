@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace poq_api.Business.Products
+namespace poq_api.Business
 {
     public class FilterOptions
     {
